@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museo de Dinosaurios</title>
+    <link rel="stylesheet" href="./static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+    <button id="menu-toggle-btn" class="menu-toggle" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <nav id="main-menu" class="main-menu">
+        <ul>
+            <li>
+                <div id="controls-container">
+                    <button id="generar-dino-btn">Generar Nuevo Espécimen</button>
+                    <div id="loading-indicator" class="hidden">
+                        <img src="./static/Marcos/loading_dino.png" alt="Descubriendo espécimen...">
+                        <span>¡Descubriendo un nuevo espécimen!</span>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <button id="show-model-info-btn">Descripción del Modelo</button>
+            </li>
+        </ul>
+    </nav>
+
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <div id="model-info-modal" class="modal-content">
+            <button id="close-modal-btn" class="close-modal" aria-label="Cerrar ventana">&times;</button>
+            <h2>Informe del Modelo de Generación</h2>
+            <div id="modal-content-area">
+                </div>
+        </div>
+    </div>
+    <div id="chat-overlay" class="modal-overlay hidden">
+        <div id="chat-modal" class="modal-content">
+            <button id="close-chat-btn" class="close-modal" aria-label="Cerrar chat">&times;</button>
+            <h2 id="chat-title">Hablando con...</h2>
+            <div id="chat-history">
+                <div class="chat-message bot">
+                    <p>¡Hola! Soy un <span id="dino-chat-name" style="font-weight: bold;">dinosaurio</span>. ¿Qué te gustaría saber sobre mí?</p>
+                </div>
+            </div>
+            <div id="chat-input-container">
+                <textarea id="chat-user-input" placeholder="Escribe tu pregunta aquí..." rows="2"></textarea>
+                <button id="chat-send-btn">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="fondo-paralax"></div>
+
+    <h1>Museo de Dinosaurios</h1>
+
+    <div class="museo-container">
+
+        <div class="dino-exhibit">
+            <div class="dino-cuadro">
+                <img src="./static/Carpetanosaurio rex/Waranatitan.png" alt="Waranatitan" class="dino-img">
+                <img src="" alt="Marco" class="dino-marco">
+            </div>
+            <div class="dino-placa">
+                </div>
+        </div>
+
+        <div class="dino-exhibit">
+            <div class="dino-cuadro">
+                <img src="./static/Carpetanosaurio rex/Hianchangosaurus.png" alt="Hianchangosaurus" class="dino-img">
+                <img src="" alt="Marco" class="dino-marco">
+            </div>
+            <div class="dino-placa">
+            </div>
+        </div>
+        <div class="dino-exhibit">
+            <div class="dino-cuadro">
+                <img src="./static/Carpetanosaurio rex/Danodon.png" alt="Danodon" class="dino-img">
+                <img src="" alt="Marco" class="dino-marco">
+            </div>
+            <div class="dino-placa">
+            </div>
+        </div>
+
+        <div class="dino-exhibit">
+            <div class="dino-cuadro">
+                <img src="./static/Carpetanosaurio rex/Siamensaurus.png" alt="Siamensaurus" class="dino-img">
+                <img src="" alt="Marco" class="dino-marco">
+            </div>
+            <div class="dino-placa">
+            </div>
+        </div>
+
+        <div class="dino-exhibit">
+            <div class="dino-cuadro">
+                <img src="./static/Carpetanosaurio rex/Ligantosaurus.png" alt="Ligantosaurus" class="dino-img">
+                <img src="" alt="Marco" class="dino-marco">
+            </div>
+            <div class="dino-placa">
+            </div>
+        </div>
+
+        <div class="dino-exhibit">
+            <div class="dino-cuadro">
+                <img src="./static/Carpetanosaurio rex/Nonosaurus.png" alt="Nonosaurus" class="dino-img">
+                <img src="" alt="Marco" class="dino-marco">
+            </div>
+            <div class="dino-placa">
+            </div>
+        </div>
+
+        <div class="dino-exhibit">
+            <div class="dino-cuadro">
+                <img src="./static/Carpetanosaurio rex/Protogosaurus.png" alt="Protogosaurus" class="dino-img">
+                <img src="" alt="Marco" class="dino-marco">
+            </div>
+            <div class="dino-placa">
+            </div>
+        </div>
+
+        <div class="dino-exhibit">
+            <div class="dino-cuadro">
+                <img src="./static/Carpetanosaurio rex/Yundanosaurus.png" alt="Yundanosaurus" class="dino-img">
+                <img src="" alt="Marco" class="dino-marco">
+            </div>
+            <div class="dino-placa">
+            </div>
+        </div>
+
+        <div class="dino-exhibit">
+            <div class="dino-cuadro">
+                <img src="./static/Carpetanosaurio rex/Rapalasaurus.png" alt="Rapalasaurus" class="dino-img">
+                <img src="" alt="Marco" class="dino-marco">
+            </div>
+            <div class="dino-placa">
+            </div>
+        </div>
+
+        <div class="dino-exhibit">
+            <div class="dino-cuadro">
+                <img src="./static/Carpetanosaurio rex/Stenosaurus.png" alt="Stenosaurus" class="dino-img">
+                <img src="" alt="Marco" class="dino-marco">
+            </div>
+            <div class="dino-placa">
+            </div>
+        </div>
+    </div> 
+    <script src="./static/script.js"></script>
+</body>
+</html>

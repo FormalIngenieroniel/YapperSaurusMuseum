@@ -1,0 +1,783 @@
+/* --- Variables Globales y Reseteo --- */
+:root {
+    --dino-img-size: 260px; 
+    --marco-borde-size: 120px;
+    --color-fondo: #1a1a1a;
+    --color-texto-placa: #2c1e14;
+    --color-luz-foco: rgba(255, 223, 150, 0.75);
+    --color-titulo: #f0f0f0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Georgia', serif;
+    background-color: var(--color-fondo);
+    color: var(--color-titulo);
+    overflow-x: hidden;
+}
+
+h1 {
+    font-family: 'Cinzel', serif; /* Use the new elegant font */
+    font-size: 4rem; /* Slightly larger for impact */
+    font-weight: 700; /* Bolder weight */
+    color: #e0d5c1; /* A soft, parchment-like color */
+    text-align: center;
+    margin: 60px 0 40px 0;
+    letter-spacing: 0.5rem; /* Wide letter spacing for a grand feel */
+    text-shadow: 2px 2px 4px #000, 0 0 10px rgba(255, 215, 0, 0.3); /* Deeper shadow with a gold hint */
+    text-transform: uppercase; /* All caps for a monumental look */
+    position: relative;
+    padding-bottom: 15px; /* Space for the underline */
+}
+
+/* Adds a decorative double line below the title */
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 3px;
+    background: #e0d5c1;
+    box-shadow: 0 5px 0 #e0d5c1;
+}
+
+/* === ESTILOS PARA MENÚ HAMBURGUESA Y MODAL === */
+
+/* --- 1. Botón de Hamburguesa --- */
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1001;
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #555;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 10px;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: #fff;
+    border-radius: 3px;
+    transition: all 0.3s ease-in-out;
+}
+
+/* --- 2. Menú Desplegable --- */
+.main-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 320px; /* Un poco más ancho para la nueva estética */
+    height: 100%;
+    /* ACCIÓN: Guarda tu imagen de fondo para el menú aquí */
+    background-image: url('./Marcos/menu_background.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: 1000;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+    padding-top: 100px; /* Más espacio arriba */
+    border-left: 2px solid #4a3f35;
+    box-shadow: -5px 0 20px rgba(0,0,0,0.5);
+}
+
+.main-menu.active {
+    transform: translateX(0);
+}
+
+.main-menu ul {
+    list-style: none;
+    padding: 0;
+}
+
+.main-menu ul li {
+    padding: 15px 20px;
+}
+
+.main-menu button {
+    /* Usamos la misma placa que los dinosaurios */
+    background-image: url('./Marcos/placatexto.png');
+    background-size: 100% 100%;
+    background-color: transparent;
+    border: none;
+
+    /* Estilo del texto */
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--color-texto-placa);
+    text-shadow: 1px 1px 1px rgba(255,255,255,0.1);
+    
+    /* Dimensiones y alineación */
+    width: 100%;
+    height: 80px; /* Altura fija para mantener la forma */
+    padding: 10px 20px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.main-menu button:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+/* --- 3. Ventana Emergente (Modal) --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    z-index: 1002;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay:not(.hidden) {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    background: #2a2a2a;
+    /* --- AÑADE ESTA LÍNEA --- */
+    background-image: url('./Marcos/menu_background4.jpg'); /* Reutilizamos la misma textura del menú */
+    
+    color: #f0f0f0;
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border: 1px solid #444;
+    font-family: 'Georgia', serif;
+}
+
+.modal-content h2 {
+    font-family: 'Cinzel', serif;
+    text-align: center;
+    font-size: 2rem;
+    color: #e0d5c1;
+    margin-bottom: 25px;
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2.5rem;
+    cursor: pointer;
+}
+
+#modal-content-area h3 {
+    border-bottom: 2px solid #555;
+    padding-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    color: #e0d5c1;
+}
+
+#modal-content-area pre {
+    background: #1e1e1e;
+    padding: 15px;
+    border-radius: 5px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: monospace;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#modal-content-area img {
+    max-width: 100%;
+    border-radius: 5px;
+    margin-top: 10px;
+    border: 1px solid #444;
+}
+
+/* Párrafo de análisis (sin cambios) */
+.analysis-note {
+    font-style: italic;
+    color: #2c1e14; /* AJUSTE: Texto oscuro, casi negro */
+    background-color: #e0d5c1; /* AJUSTE: Fondo color arena */
+    border-left: 4px solid #4a3f35; /* AJUSTE: Un borde oscuro para contraste */
+    padding: 12px 15px;
+    margin: 15px 0 25px 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    border-radius: 0 8px 8px 0;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.3); /* Sombra para darle profundidad */
+}
+
+/* Nuevo: Estilos para el diagrama de flujo de preprocesamiento */
+.preprocess-flow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+    font-family: monospace;
+}
+
+.flow-step {
+    background-color: #e0d5c1; /* AJUSTE: Fondo color arena */
+    color: #2c1e14;           /* AJUSTE: Texto oscuro */
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: 1px solid #4a3f35; /* AJUSTE: Borde oscuro */
+    box-shadow: 1px 1px 5px rgba(0,0,0,0.2); /* Sombra sutil */
+}
+
+.flow-arrow {
+    font-size: 1.5rem;
+    color: #e0d5c1;
+}
+
+/* Ajustes a las tablas y tarjetas (sin cambios) */
+.report-table {
+    width: 100%;
+    margin-top: 15px;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.report-table th, .report-table td {
+    border: 1px solid #444;
+    padding: 10px 12px;
+    text-align: left;
+}
+
+.report-table thead th {
+    background-color: #2c1e14; /* AJUSTE: Fondo oscuro, como el texto de las placas */
+    color: #e0d5c1;           /* AJUSTE: Texto color arena */
+    text-transform: uppercase;  /* Toque extra para que se vea más formal */
+}
+
+/* Filas del cuerpo de la tabla con fondo arena */
+.report-table tbody tr {
+    background-color: #e0d5c1; /* AJUSTE: Fondo color arena */
+}
+
+/* Quitamos el color alterno para que todas las filas sean iguales */
+.report-table tbody tr:nth-child(even) {
+    background-color: #e0d5c1;
+}
+
+/* Celdas del cuerpo de la tabla con texto oscuro */
+.report-table tbody td {
+    color: #2c1e14; /* AJUSTE: Texto oscuro */
+    border-color: #bdae95; /* Borde un poco más oscuro para mejor definición */
+}
+
+.report-table ul { list-style-type: none; padding-left: 0; margin: 0; }
+.report-table ul li { padding: 2px 0; }
+
+.metrics-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.metric-card {
+    background-color: #e0d5c1; /* AJUSTE: Fondo color arena */
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 5px solid #4a3f35; /* AJUSTE: Borde oscuro */
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.3); /* Sombra para profundidad */
+}
+
+.metric-card-title {
+    font-size: 0.9rem;
+    color: #4a3f35; /* AJUSTE: Texto oscuro y un poco más suave */
+    margin-bottom: 5px;
+}
+
+.metric-card-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2c1e14; /* AJUSTE: Texto oscuro principal */
+}
+
+.curves-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.curves-container img {
+    flex: 1;
+    min-width: 300px;
+    max-width: 100%;
+    border-radius: 5px;
+    margin-top: 10px;
+    border: 1px solid #444;
+}
+
+.fondo-paralax {
+    background-image: url('./Marcos/fondo.png');
+    background-size: cover;
+    background-position: center center;
+    position: fixed;
+    z-index: -1;
+    top: -50px;
+    left: -50px;
+    right: -50px;
+    bottom: -50px;
+}
+
+.museo-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(5, auto);
+    gap: 100px;
+    padding: 40px;
+    width: 90%;
+    max-width: 15000px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 5;
+}
+
+.dino-exhibit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+}
+
+.museo-container:hover .dino-exhibit {
+    opacity: 0.5;
+    transform: scale(0.98);
+}
+
+.museo-container .dino-exhibit:hover {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+.dino-cuadro {
+    position: relative;
+    width: calc(var(--dino-img-size) + 2 * var(--marco-borde-size));
+    height: calc(var(--dino-img-size) + 2 * var(--marco-borde-size));
+    margin-bottom: 20px;
+    transition: filter 0.4s ease-out;
+}
+
+.dino-exhibit:hover .dino-cuadro {
+    filter: drop-shadow(0 0 20px var(--color-luz-foco));
+}
+
+.dino-img {
+    width: var(--dino-img-size);
+    height: var(--dino-img-size);
+    object-fit: cover;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+    border-radius: 4px;
+}
+
+.dino-marco {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    pointer-events: none; 
+}
+
+/* === NUEVO: ESTILOS DEL SLICER DE PLACAS === */
+
+/* 1. Contenedor Principal del Slicer */
+/* Ocupa el espacio de la placa original y oculta el contenido que se desborda */
+.placa-slicer-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    overflow: hidden; /* ¡La clave! Oculta la segunda placa */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    transition: height 0.6s cubic-bezier(0.86, 0, 0.07, 1);
+}
+
+/* 2. El Wrapper que se desliza */
+/* Es el doble de ancho que el contenedor para albergar las dos placas */
+.placa-wrapper {
+    display: flex;
+    width: 200%; /* 100% para cada una de las dos placas */
+    /* Animación suave para el deslizamiento */
+    transition: transform 0.6s cubic-bezier(0.86, 0, 0.07, 1);
+    align-items: flex-start;
+}
+
+/* 3. Clase que activa el deslizamiento */
+.placa-wrapper.slide-active {
+    transform: translateX(-50%); /* Mueve el wrapper a la izquierda */
+}
+
+/* 4. Estilo de cada Placa dentro del Slicer */
+.dino-placa {
+    width: 50%;
+    flex-shrink: 0;
+    background-image: url('./Marcos/placatexto.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    
+    /* AJUSTE 1: Aumenta el padding para crear el margen interior */
+    /* Puedes ajustar el '60px' si necesitas más o menos espacio lateral */
+    padding: 80px 70px;
+    
+    text-align: left;
+    color: var(--color-texto-placa);
+    font-size: 0.95rem;
+    line-height: 1.6;
+
+    /* AJUSTE 2: Añade estas 3 líneas para centrar el contenido */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* ¡Esta es la clave para el centrado vertical! */
+}
+
+/* 5. Estilo de las Flechas de Navegación */
+.slicer-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    background-color: rgba(44, 30, 20, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.slicer-arrow:hover {
+    background-color: rgba(44, 30, 20, 1);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.slicer-arrow.prev {
+    left: 10px;
+}
+
+.slicer-arrow.next {
+    right: 10px;
+}
+
+/* === ESTILOS PARA EL NUEVO BOTÓN GENERADOR === */
+.generador-container {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+#generar-dino-btn {
+    /* Aplicamos el mismo fondo de placa */
+    background-image: url('./Marcos/placatexto.png');
+    background-size: 100% 100%;
+    background-color: transparent;
+    border: none;
+    
+    /* Mismos estilos de texto que los otros botones del menú */
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--color-texto-placa);
+    text-shadow: 1px 1px 1px rgba(255,255,255,0.1);
+
+    /* Ajuste de dimensiones y alineación */
+    width: 100%;
+    height: 80px; /* Misma altura para consistencia */
+    padding: 10px 20px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+    outline: none; /* Quitamos el borde al hacer clic */
+}
+
+#generar-dino-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5), inset 0 -3px 5px rgba(0,0,0,0.2);
+}
+
+#generar-dino-btn:active {
+    transform: translateY(1px);
+}
+
+#generar-dino-btn:disabled {
+    background: #999;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+#loading-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #e0d5c1;
+    font-size: 1.1rem;
+    font-family: 'Cinzel', serif;
+}
+
+#loading-indicator.hidden {
+    display: none;
+}
+
+#loading-indicator img {
+    width: 120px;
+    height: auto;
+    margin-bottom: 15px;
+    /* Animación de balanceo */
+    animation: dino-bob 1.5s ease-in-out infinite;
+}
+
+#loading-indicator span {
+    /* Estilo del texto */
+    text-align: center;
+    color: #2c1e14; /* Mantenemos el color oscuro */
+    font-weight: 600; /* Hacemos la letra un poco más gruesa */
+
+    /* Fondo de la placa */
+    background-image: url('./Marcos/placatexto.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+
+    /* Dimensiones y centrado del texto */
+    width: 240px;  /* Ancho de la placa */
+    height: 70px;  /* Alto de la placa */
+    padding: 10px; /* Espaciado interno para que el texto no toque los bordes */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Animación para el dinosaurio */
+@keyframes dino-bob {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.spinner {
+    margin: 15px auto 0;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top: 4px solid #e0d5c1;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+#chat-modal {
+    max-width: 600px;
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    /* ¡AQUÍ PUEDES PONER TU FONDO PARA EL CHAT! */
+    /* Crea una imagen de fondo y ponla en /static/Marcos/ */
+    background-image: url('./Marcos/fondo_chat4.webp');
+    background-size: cover;
+    background-position: center;
+}
+
+#chat-history {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.chat-message {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    max-width: 80%;
+}
+
+.chat-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.chat-message p {
+    padding: 10px 15px;
+    border-radius: 18px;
+    line-height: 1.5;
+    position: relative;
+    margin: 0;
+}
+
+/* --- Mensajes del Bot (Dinosaurio) --- */
+.chat-message.bot {
+    align-self: flex-start; /* ALINEA A LA IZQUIERDA */
+}
+
+.chat-message.bot p {
+    background-color: #e0d5c1;
+    color: #2c1e14;
+    border-bottom-left-radius: 5px;
+}
+
+.chat-message.bot p::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -8px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid #e0d5c1;
+}
+
+/* --- Mensajes del Usuario --- */
+.chat-message.user {
+    align-self: flex-end; /* ALINEA A LA DERECHA */
+    flex-direction: row-reverse;
+}
+
+.chat-message.user p {
+    background-color: #2b3a42;
+    color: #f0f0f0;
+    border-bottom-right-radius: 5px;
+}
+
+.chat-message.user p::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: -8px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 10px solid #2b3a42;
+}
+
+#chat-input-container {
+    display: flex;
+    padding: 15px;
+    background: rgba(0,0,0,0.2);
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+#chat-user-input {
+    flex-grow: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background: #333;
+    color: #fff;
+    font-family: 'Georgia', serif;
+    resize: none; /* Evita que el usuario cambie el tamaño */
+}
+
+#chat-send-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #4a3f35;
+    color: #e0d5c1;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+#chat-send-btn:hover {
+    background-color: #635446;
+}
+
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+}
+
+.typing-indicator span {
+  height: 8px;
+  width: 8px;
+  background-color: #4a3f35;
+  border-radius: 50%;
+  margin: 0 3px;
+  animation: typing-bob 1.4s infinite ease-in-out;
+}
+
+.typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+.typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typing-bob {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1.0); }
+}
+
+.blinking-cursor {
+  font-weight: bold;
+  animation: blink 1s step-start 0s infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
